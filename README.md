@@ -9,12 +9,19 @@
 - php 7.3
 - laravel/lumen 8
 
-```sudo apt-get install php7.3-xml```
-```sudo apt-get install php7.3-mbstring```
+```bash
+sudo apt-get install php7.3-xml
+```
+
+```bash 
+sudo apt-get install php7.3-mbstring
+```
 
 ## Start The App
 
-```php -S localhost:8000 -t public```
+```bash
+php -S localhost:8000 -t public
+```
 
 Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
 
