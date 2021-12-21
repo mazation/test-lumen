@@ -3,11 +3,12 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Role extends Model
+class Event extends Model
 {
-    use  HasFactory;
+    use  HasFactory, SoftDeletes;
     public $timestamps = true;
     /**
      * The attributes that are mass assignable.
@@ -15,7 +16,11 @@ class Role extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'name', 
     ];
+
+    public function organizer() {
+       return $this->belongsTo(User::class, 'owner_id');
+    }
 
 }
