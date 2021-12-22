@@ -11,10 +11,10 @@
 
 ```bash
 sudo apt-get install php7.3-xml
-```
-
-```bash 
 sudo apt-get install php7.3-mbstring
+composer install
+php artisan migrate
+php artisan db:seed
 ```
 
 ## Start The App
