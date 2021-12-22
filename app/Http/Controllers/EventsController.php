@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Event as ModelsEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\HTTP\Utils\Utils;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Event;
 
@@ -95,11 +97,20 @@ class EventsController extends BaseController
     public function list(Request $request) {
         $this->validate($request, [
             "orderByName" => "in:desc,asc",
-            "orderByDate" => "in:desc,asc"
+            "orderByDate" => "in:desc,asc",
+            "name" => "array",
+            "tsbegin" => "array"
         ]);
-        $events = Event::orderBy('tsbegin', 'desc');
+        $events_table = DB::table(Event::getTableName());
+        if ($request->name) {
+            $$events_table = Utils::getFilteredItems($events_table, 'name', $request->name);
+        }
+        if ($request->tsbegin) {
+            $$events_table = Utils::getFilteredItems($events_table, 'tsbegin', $request->tsbegin);
+        }
+        $events = $events_table->orderBy('tsbegin', 'desc');
         if ($request->orderByName) $events->orderBy('name', $request->orderByName);
-        if ($request->orderByDate) $events->orderBy('name', $request->orderByDate);
+        if ($request->orderByDate) $events->orderBy('tsbegin', $request->orderByDate);
         return response()->json([
             "success" => true,
             "events" => $events->paginate(15)
