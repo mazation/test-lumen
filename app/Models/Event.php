@@ -23,4 +23,9 @@ class Event extends Model
        return $this->belongsTo(User::class, 'owner_id');
     }
 
+    public static function getTableName()
+    {
+        return with(new static)->getTable();
+    }
+
 }

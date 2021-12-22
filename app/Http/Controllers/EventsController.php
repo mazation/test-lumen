@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event as ModelsEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\HTTP\Utils\Utils;
+use App\Utils\Utils;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Event;
@@ -18,7 +18,7 @@ class EventsController extends BaseController
 {
     public function get(Request $request)
     {
-        $event = Event::findOrFail( request()->route('id'));
+        $event = Event::findOrFail(request()->route('id'));
         return response()->json([
             'success' => true,
             'event' => $event
@@ -39,7 +39,7 @@ class EventsController extends BaseController
         $event = new Event();
         $event->name = $request->name;
         $event->tsbegin = $request->tsbegin;
-        $event->tsend =$request->tsend;
+        $event->tsend = $request->tsend;
         $event->picture = $pic_path;
         $event->owner_id = $user->id;
         $event->save();
@@ -75,10 +75,11 @@ class EventsController extends BaseController
         return response()->json([
             "success" => true,
             "event" => $event
-        ]);        
+        ]);
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         $id = request()->route('id');
         $event = Event::find($id);
         if (!$event) return response()->json([
@@ -94,23 +95,24 @@ class EventsController extends BaseController
         ]);
     }
 
-    public function list(Request $request) {
+    public function list(Request $request)
+    {
         $this->validate($request, [
             "orderByName" => "in:desc,asc",
             "orderByDate" => "in:desc,asc",
-            "name" => "array",
-            "tsbegin" => "array"
+            "name" => "array:eq,like",
+            "tsbegin" => "array:eq,gt,gte,lt,lte"
         ]);
         $events_table = DB::table(Event::getTableName());
         if ($request->name) {
-            $$events_table = Utils::getFilteredItems($events_table, 'name', $request->name);
+            $events_table = Utils::getFilteredItems($events_table, 'name', $request->name);
         }
         if ($request->tsbegin) {
-            $$events_table = Utils::getFilteredItems($events_table, 'tsbegin', $request->tsbegin);
+            $events_table = Utils::getFilteredItems($events_table, 'tsbegin', $request->tsbegin);
         }
-        $events = $events_table->orderBy('tsbegin', 'desc');
-        if ($request->orderByName) $events->orderBy('name', $request->orderByName);
-        if ($request->orderByDate) $events->orderBy('tsbegin', $request->orderByDate);
+        if ($request->orderByName) $events = $events_table->orderBy('name', $request->orderByName);
+        else if ($request->orderByDate) $events = $events_table->orderBy('tsbegin', $request->orderByDate);
+        else $events = $events_table->orderBy('tsbegin', 'desc');
         return response()->json([
             "success" => true,
             "events" => $events->paginate(15)

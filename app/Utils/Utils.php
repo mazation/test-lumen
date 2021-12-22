@@ -1,5 +1,5 @@
 <?php 
-namespace App\HTTP\Utils;
+namespace App\Utils;
 
 class Utils {
 
@@ -10,7 +10,7 @@ class Utils {
         if (array_key_exists('lte', $values)) $current_model = $current_model->where($field, '<=', $values['lte']);
         if (array_key_exists('gt', $values)) $current_model = $current_model->where($field, '>', $values['gt']);
         if (array_key_exists('gte', $values)) $current_model = $current_model->where($field, '>=', $values['gte']);
-        if (array_key_exists('like', $values)) $current_model = $current_model->where($field, 'like', $values['like']);
+        if (array_key_exists('like', $values)) $current_model = $current_model->where($field, 'like', "%" . $values['like'] . "%");
         return $current_model;
     }
 }

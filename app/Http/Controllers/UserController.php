@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,8 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserController extends BaseController
 {
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $this->validate($request, [
             "api_key" => 'required',
             "name" => "required",
@@ -29,5 +31,4 @@ class UserController extends BaseController
             'token' => $user->api_token
         ]);
     }
-    
 }
