@@ -9,6 +9,8 @@
 - php 7.3
 - laravel/lumen 8
 
+Перед запуском следует отредпктировать файл `.env`. Задать параметры подключения к базе данных, а также переменную REGISTER_API_KEY, которая используется как ключ для регистрации пользователей. 
+
 ```bash
 sudo apt-get install php7.3-xml
 sudo apt-get install php7.3-mbstring
