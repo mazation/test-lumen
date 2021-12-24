@@ -62,7 +62,7 @@ class EventsController extends BaseController
             "success" => false,
             "error" => "Event was not found"
         ]);
-        if ($user->id != $event->owner_id) return response("Unauthorized", 401);
+        if (!($user->id == $event->owner_id || $user->hasPermission("GetAllEvents"))) return response("Access Denied", 403);
         $pic_path = '';
         if ($request->hasFile('picture')) {
             $pic_path = $request->picture->store('pictures');
@@ -101,7 +101,8 @@ class EventsController extends BaseController
             "orderByName" => "in:desc,asc",
             "orderByDate" => "in:desc,asc",
             "name" => "array:eq,like",
-            "tsbegin" => "array:eq,gt,gte,lt,lte"
+            "tsbegin" => "array:eq,gt,gte,lt,lte",
+            "owner_id" => "array:eq"
         ]);
         $events_table = DB::table(Event::getTableName());
         if ($request->name) {
@@ -109,6 +110,9 @@ class EventsController extends BaseController
         }
         if ($request->tsbegin) {
             $events_table = Utils::getFilteredItems($events_table, 'tsbegin', $request->tsbegin);
+        }
+        if ($request->owner_id) {
+            $events_table = Utils::getFilteredItems($events_table, 'owner_id', $request->owner_id);
         }
         if ($request->orderByName) $events = $events_table->orderBy('name', $request->orderByName);
         else if ($request->orderByDate) $events = $events_table->orderBy('tsbegin', $request->orderByDate);

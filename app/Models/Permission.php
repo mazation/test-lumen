@@ -3,9 +3,9 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Permission;
+use Role;
 
-class Role extends Model
+class Permission extends Model
 {
     use  HasFactory;
     public $timestamps = true;
@@ -18,8 +18,8 @@ class Role extends Model
         'name',
     ];
 
-    public function permissions() {
-        return $this->morphByMany(Permission::class, 'roles_pemissions');
+    public function roles() {
+        return $this->morphToMany(Role::class, 'roles_pemissions');
     }
 
 }

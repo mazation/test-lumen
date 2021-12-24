@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Models\Event;
+use Event;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -30,11 +30,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'api_token',
+        'api_token', 'password'
     ];
 
     public function events() {
         return $this->morphToMany(Event::class, 'users_events');
+    }
+
+    public function roles() {
+        return $this->morphToMany(Event::class, 'users_roles');
+    }
+
+    public function hasPermission(String $permission) {
+        return $this->roles->permissions->where('name', $permission)->get();
     }
 
 }
