@@ -18,7 +18,7 @@ class CreateRolesUsersTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('role_id');
             $table->timestamps();
-            $table->timestamp('deleted_at');
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

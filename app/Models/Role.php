@@ -3,7 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Permission;
+use App\Models\Permission;
 
 class Role extends Model
 {
@@ -19,7 +19,7 @@ class Role extends Model
     ];
 
     public function permissions() {
-        return $this->morphByMany(Permission::class, 'roles_pemissions');
+        return $this->belongsToMany(Permission::class, 'roles_permissions', 'role_id', 'permission_id');
     }
 
 }

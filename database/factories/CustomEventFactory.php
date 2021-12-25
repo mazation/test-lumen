@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
+use App\Models\CustomEvent;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class EventFactory extends Factory
+class CustomEventFactory extends Factory
 {
-    protected $model = Event::class;
+    protected $model = CustomEvent::class;
 
     public function definition()
     {

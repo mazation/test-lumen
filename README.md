@@ -14,6 +14,7 @@
 sudo apt-get install php7.3-xml
 sudo apt-get install php7.3-mbstring
 composer install
+ln -s storage/app/public publc/storage
 php artisan migrate
 php artisan db:seed
 ```

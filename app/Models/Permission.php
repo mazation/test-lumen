@@ -19,7 +19,7 @@ class Permission extends Model
     ];
 
     public function roles() {
-        return $this->morphToMany(Role::class, 'roles_pemissions');
+        return $this->belongsToMany(Role::class, 'roles_pemissions');
     }
 
 }

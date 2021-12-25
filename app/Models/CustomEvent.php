@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Event extends Model
+class CustomEvent extends Model
 {
     use  HasFactory, SoftDeletes;
     public $timestamps = true;
@@ -15,6 +15,7 @@ class Event extends Model
      *
      * @var array
      */
+    protected $table = "events";
     protected $fillable = [
         'name', 
     ];
@@ -26,6 +27,10 @@ class Event extends Model
     public static function getTableName()
     {
         return with(new static)->getTable();
+    }
+
+    public function users() {
+        return $this->belongsToMany(User::class, 'users_events', 'event_id', 'user_id')->withTimestamps();
     }
 
 }

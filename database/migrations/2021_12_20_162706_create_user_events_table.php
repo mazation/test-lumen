@@ -18,6 +18,7 @@ class CreateUserEventsTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('event_id');
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('event_id')->references('id')->on('events');
         });

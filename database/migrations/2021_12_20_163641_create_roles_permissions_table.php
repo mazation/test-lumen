@@ -18,7 +18,7 @@ class CreateRolesPermissionsTable extends Migration
             $table->foreignId('role_id');
             $table->foreignId('permission_id');
             $table->timestamps();
-            $table->timestamp('deleted_at');
+            $table->timestamp('deleted_at')->nullable();
             $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('permission_id')->references('id')->on('permissions');
         });

@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Event;
+use App\Models\CustomEvent;
+use App\Models\Permission;
+use App\Models\Role;
+use Log;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -34,15 +37,28 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     public function events() {
-        return $this->morphToMany(Event::class, 'users_events');
+        return $this->belongsToMany(CustomEvent::class, 'users_events', 'user_id', 'event_id')->withTimestamps();
     }
 
     public function roles() {
-        return $this->morphToMany(Event::class, 'users_roles');
+        return $this->belongsToMany(Role::class, 'roles_users', 'user_id', 'role_id')->withTimestamps();
     }
 
+    public function permissions() {
+        $permission_ids = [];
+        $roles = $this->roles()->get();
+        foreach ($roles as $role) {
+            $permissions = Role::find($role->id)->permissions()->get();
+            foreach ($permissions as $permission) {
+                array_push($permission_ids, $permission->id);
+            }
+        }
+        return Permission::whereIn('id', $permission_ids);
+    }
+    
     public function hasPermission(String $permission) {
-        return $this->roles->permissions->where('name', $permission)->get();
+        $found_permissions = $this->permissions()->where('name', $permission)->get();
+        return $found_permissions->isEmpty() ? false : true;
     }
 
 }
